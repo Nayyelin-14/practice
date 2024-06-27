@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Main, { mainLoader } from "./Layouts/Main";
+import Dashboard, { dashboardAction, dashboardLoader } from "./Pages/Dashboard";
+import Logout, { logoutAction } from "./Pages/Logout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Budget from "./Pages/Budget";
 
-function App() {
+const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Main />,
+      loader: mainLoader,
+      children: [
+        {
+          index: true,
+          element: <Dashboard />,
+          action: dashboardAction,
+          loader: dashboardLoader,
+        },
+        {
+          path: "/logout",
+          element: <Logout />,
+          action: logoutAction,
+        },
+        {
+          path: "budget/:id",
+          element: <Budget />,
+        },
+      ],
+    },
+  ]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <RouterProvider router={router} />
+      <ToastContainer />
     </div>
   );
-}
+};
 
 export default App;
